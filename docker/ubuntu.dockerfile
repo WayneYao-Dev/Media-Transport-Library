@@ -92,6 +92,8 @@ LABEL org.opencontainers.image.version="1.26.0"
 LABEL org.opencontainers.image.vendor="Intel® Corporation"
 LABEL org.opencontainers.image.licenses="BSD 3-Clause License"
 
+ARG PREFIX_PATH=/opt/intel
+ARG MTL_REPO=${PREFIX_PATH}/mtl
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/Warsaw"
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
