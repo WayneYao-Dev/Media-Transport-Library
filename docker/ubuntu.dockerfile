@@ -23,10 +23,10 @@ SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 # Install build dependencies and debug tools
 WORKDIR "${DPDK_REPO}"
-RUN apt update -y && \
-    apt upgrade -y && \
-    apt install -y --no-install-recommends ca-certificates sudo curl unzip apt-transport-https apt-utils python3-dev && \
-    apt autoremove -y && \
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends ca-certificates sudo curl unzip apt-transport-https apt-utils python3-dev && \
+    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3 && \
     python3 -m pip --no-cache-dir install --upgrade pip setuptools
