@@ -10,6 +10,7 @@ linux_gtest: &linux_gtest
   - 'patches/ice_drv/**'
   - '*src'
   - '*build'
+  - *ubuntu_build
 
 ice_build: &ice_build
   - .github/workflows/base_build.yml
@@ -27,7 +28,6 @@ plugin_build: &plugin_build
 rust_build: &rust_hooks_build
   - .github/workflows/base_build.yml
   - 'rust/**'
-
 
 python_build: &python_hooks_build
   - .github/workflows/base_build.yml
