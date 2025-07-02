@@ -112,7 +112,7 @@ RUN apt-get clean -y && rm -rf /var/lib/apt/lists/* && \
 
 # Copy libraries and binaries
 COPY --chown=imtl --from=builder /install /
-COPY --chown=imtl --from=builder "${MTL_REPO}/build /home/imtl"
+COPY --chown=imtl --from=builder "${MTL_REPO}/build" "/home/imtl"
 COPY --chown=imtl --from=builder "${MTL_REPO}/tests/tools/RxTxApp/build/RxTxApp" "/home/imtl/RxTxApp"
 COPY --chown=imtl --from=builder "${MTL_REPO}/tests/tools/RxTxApp/script" "/home/imtl/scripts"
 
