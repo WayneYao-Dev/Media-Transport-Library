@@ -9,8 +9,9 @@ FROM "${IMAGE_CACHE_REGISTRY}/library/ubuntu:22.04@sha256:149d67e29f765f4db62aa5
 
 LABEL maintainer="andrzej.wilczynski@intel.com,dawid.wesierski@intel.com,marek.kasiewicz@intel.com"
 
+ARG NPROC=20
+ARG DPDK_VER=25.03
 ENV MTL_REPO=Media-Transport-Library
-ENV DPDK_VER=25.03
 ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/Warsaw"
@@ -18,18 +19,27 @@ ENV TZ="Europe/Warsaw"
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 # Install build dependencies and debug tools
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    apt-get update -y && \
-    apt-get install -y --no-install-recommends ca-certificates sudo curl unzip
-    apt-get install -y --no-install-recommends git build-essential meson python3 python3-pyelftools pkg-config libnuma-dev libjson-c-dev libpcap-dev libgtest-dev libsdl2-dev libsdl2-ttf-dev libssl-dev ca-certificates && \
+RUN apt update -y && \
+    apt upgrade -y && \
+    apt install -y --no-install-recommends ca-certificates sudo curl unzip apt-transport-https apt-utils python3-dev && \
+    apt autoremove -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3 && \
+    python3 -m pip --no-cache-dir install --upgrade pip setuptools
+
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends git build-essential python3-pyelftools pkg-config libnuma-dev libjson-c-dev libpcap-dev libgtest-dev libsdl2-dev libsdl2-ttf-dev libssl-dev && \
     apt-get install -y --no-install-recommends m4 clang llvm zlib1g-dev libelf-dev libcap-ng-dev libcap2-bin gcc-multilib; \
     apt-get install -y --no-install-recommends systemtap-sdt-dev || true; \
+    apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    python3 -m pip --no-cache-dir install meson ninja
 
 COPY . $MTL_REPO
 
 # Clone DPDK and xdp-tools repo
+WORKDIR /dpdk
 RUN git clone https://github.com/DPDK/dpdk.git && \
     git clone --recurse-submodules https://github.com/xdp-project/xdp-tools.git
 
@@ -41,22 +51,28 @@ RUN git checkout v$DPDK_VER && \
     git config --global user.name "Your Name" && \
     git am ../$MTL_REPO/patches/dpdk/$DPDK_VER/*.patch && \
     meson setup build && \
-    meson install -C build && \
-    DESTDIR=/install meson install -C build
+    ninja -C build && \
+    ninja -C build install && \
+    DESTDIR=/install ninja -C build install
 
 # Build the xdp-tools project
 WORKDIR /xdp-tools
-RUN ./configure && make &&\
-    make install && \
-    DESTDIR=/install make install
+RUN ./configure && \
+    make -j${NPROC:-$(nproc)} && \
+    make -j${NPROC:-8} install && \
+    DESTDIR=/install make -j${NPROC:-8} install
+
 WORKDIR /xdp-tools/lib/libbpf/src
-RUN make install && \
-    DESTDIR=/install make install
+RUN make -j${NPROC:-$(nproc)} && \
+    make -j${NPROC:-8} install && \
+    DESTDIR=/install make -j${NPROC:-8} install
 
 # Build MTL
 WORKDIR /$MTL_REPO
 RUN ./build.sh && \
-    DESTDIR=/install meson install -C build && \
+    ninja -C build && \
+    ninja -C build install &&
+    DESTDIR=/install ninja -C build install &&
     setcap 'cap_net_raw+ep' ./tests/tools/RxTxApp/build/RxTxApp
 
 # Ubuntu 22.04, runtime/final stage
