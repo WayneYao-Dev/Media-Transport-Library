@@ -11,7 +11,10 @@ LABEL maintainer="andrzej.wilczynski@intel.com,dawid.wesierski@intel.com,marek.k
 
 ARG NPROC=20
 ARG DPDK_VER=25.03
-ENV MTL_REPO=Media-Transport-Library
+ENV PREFIX_PATH=/opt/intel
+ENV MTL_REPO=${PREFIX_PATH}/mtl
+ENV XDP_REPO=${PREFIX_PATH}/xdp
+ENV DPDK_REPO=${PREFIX_PATH}/dpdk
 ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/Warsaw"
@@ -19,6 +22,7 @@ ENV TZ="Europe/Warsaw"
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 # Install build dependencies and debug tools
+WORKDIR "${DPDK_REPO}"
 RUN apt update -y && \
     apt upgrade -y && \
     apt install -y --no-install-recommends ca-certificates sudo curl unzip apt-transport-https apt-utils python3-dev && \
@@ -27,6 +31,7 @@ RUN apt update -y && \
     curl -fsSL https://bootstrap.pypa.io/get-pip.py | python3 && \
     python3 -m pip --no-cache-dir install --upgrade pip setuptools
 
+WORKDIR "${MTL_REPO}"
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends git build-essential python3-pyelftools pkg-config libnuma-dev libjson-c-dev libpcap-dev libgtest-dev libsdl2-dev libsdl2-ttf-dev libssl-dev && \
     apt-get install -y --no-install-recommends m4 clang llvm zlib1g-dev libelf-dev libcap-ng-dev libcap2-bin gcc-multilib; \
@@ -36,43 +41,42 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/* && \
     python3 -m pip --no-cache-dir install meson ninja
 
-COPY . $MTL_REPO
+COPY . "${MTL_REPO}"
 
 # Clone DPDK and xdp-tools repo
-WORKDIR /dpdk
-RUN git clone https://github.com/DPDK/dpdk.git && \
-    git clone --recurse-submodules https://github.com/xdp-project/xdp-tools.git
+WORKDIR "${XDP_REPO}"
+RUN git clone https://github.com/DPDK/dpdk.git "${DPDK_REPO}" && \
+    git clone --recurse-submodules https://github.com/xdp-project/xdp-tools.git "${XDP_REPO}"
 
 # Build DPDK with Media-Transport-Library patches
-WORKDIR /dpdk
+WORKDIR "${DPDK_REPO}"
 RUN git checkout v$DPDK_VER && \
     git switch -c v$DPDK_VER && \
     git config --global user.email "you@example.com" && \
     git config --global user.name "Your Name" && \
-    git am ../$MTL_REPO/patches/dpdk/$DPDK_VER/*.patch && \
+    git am "${MTL_REPO}/patches/dpdk/${DPDK_VER}/"*.patch && \
     meson setup build && \
     ninja -C build && \
     ninja -C build install && \
     DESTDIR=/install ninja -C build install
 
 # Build the xdp-tools project
-WORKDIR /xdp-tools
+WORKDIR "${XDP_REPO}"
 RUN ./configure && \
     make -j${NPROC:-$(nproc)} && \
     make -j${NPROC:-8} install && \
-    DESTDIR=/install make -j${NPROC:-8} install
-
-WORKDIR /xdp-tools/lib/libbpf/src
-RUN make -j${NPROC:-$(nproc)} && \
-    make -j${NPROC:-8} install && \
-    DESTDIR=/install make -j${NPROC:-8} install
+    DESTDIR=/install make -j${NPROC:-8} install && \
+    mkdir -p /xdp-tools/lib/libbpf/src && \
+    make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-$(nproc)} && \
+    make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-8} install && \
+    DESTDIR=/install make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-8} install
 
 # Build MTL
 WORKDIR /$MTL_REPO
 RUN ./build.sh && \
     ninja -C build && \
-    ninja -C build install &&
-    DESTDIR=/install ninja -C build install &&
+    ninja -C build install && \
+    DESTDIR=/install ninja -C build install && \
     setcap 'cap_net_raw+ep' ./tests/tools/RxTxApp/build/RxTxApp
 
 # Ubuntu 22.04, runtime/final stage
