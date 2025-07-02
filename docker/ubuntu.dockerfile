@@ -79,6 +79,7 @@ RUN "${MTL_REPO}/build.sh" && \
     setcap 'cap_net_raw+ep' "${MTL_REPO}/tests/tools/RxTxApp/build/RxTxApp"
 
 # Ubuntu 22.04, runtime/final stage
+ARG MTL_REPO
 ARG IMAGE_CACHE_REGISTRY
 FROM "${IMAGE_CACHE_REGISTRY}/library/ubuntu:22.04@sha256:149d67e29f765f4db62aa52161009e99e389544e25a8f43c8c89d4a445a7ca37" AS final
 
@@ -91,7 +92,6 @@ LABEL org.opencontainers.image.version="1.26.0"
 LABEL org.opencontainers.image.vendor="Intel® Corporation"
 LABEL org.opencontainers.image.licenses="BSD 3-Clause License"
 
-ARG MTL_REPO
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/Warsaw"
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
