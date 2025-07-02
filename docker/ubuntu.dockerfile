@@ -11,8 +11,8 @@ LABEL maintainer="andrzej.wilczynski@intel.com,dawid.wesierski@intel.com,marek.k
 
 ARG NPROC=20
 ARG DPDK_VER=25.03
-ENV PREFIX_PATH=/opt/intel
-ENV MTL_REPO=${PREFIX_PATH}/mtl
+ARG PREFIX_PATH=/opt/intel
+ARG MTL_REPO=${PREFIX_PATH}/mtl
 ENV XDP_REPO=${PREFIX_PATH}/xdp
 ENV DPDK_REPO=${PREFIX_PATH}/dpdk
 ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig
@@ -66,18 +66,18 @@ RUN ./configure && \
     make -j${NPROC:-$(nproc)} && \
     make -j${NPROC:-8} install && \
     DESTDIR=/install make -j${NPROC:-8} install && \
-    mkdir -p /xdp-tools/lib/libbpf/src && \
-    make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-$(nproc)} && \
-    make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-8} install && \
-    DESTDIR=/install make -C "/xdp-tools/lib/libbpf/src" -j${NPROC:-8} install
+    mkdir -p "${XDP_REPO}/lib/libbpf/src" && \
+    make -C "${XDP_REPO}/lib/libbpf/src" -j${NPROC:-$(nproc)} && \
+    make -C "${XDP_REPO}/lib/libbpf/src" -j${NPROC:-8} install && \
+    DESTDIR=/install make -C "${XDP_REPO}/lib/libbpf/src" -j${NPROC:-8} install
 
 # Build MTL
-WORKDIR /$MTL_REPO
-RUN ./build.sh && \
-    ninja -C build && \
-    ninja -C build install && \
-    DESTDIR=/install ninja -C build install && \
-    setcap 'cap_net_raw+ep' ./tests/tools/RxTxApp/build/RxTxApp
+WORKDIR "${MTL_REPO}"
+RUN "${MTL_REPO}/build.sh" && \
+    ninja -C "${MTL_REPO}/build" && \
+    ninja -C "${MTL_REPO}/build" install && \
+    DESTDIR=/install ninja -C "${MTL_REPO}/build" install && \
+    setcap 'cap_net_raw+ep' "${MTL_REPO}/tests/tools/RxTxApp/build/RxTxApp"
 
 # Ubuntu 22.04, runtime/final stage
 ARG IMAGE_CACHE_REGISTRY
@@ -92,6 +92,7 @@ LABEL org.opencontainers.image.version="1.26.0"
 LABEL org.opencontainers.image.vendor="Intel® Corporation"
 LABEL org.opencontainers.image.licenses="BSD 3-Clause License"
 
+ARG MTL_REPO
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Europe/Warsaw"
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
@@ -111,9 +112,9 @@ RUN apt-get clean -y && rm -rf /var/lib/apt/lists/* && \
 
 # Copy libraries and binaries
 COPY --chown=imtl --from=builder /install /
-COPY --chown=imtl --from=builder /Media-Transport-Library/build /home/imtl
-COPY --chown=imtl --from=builder /Media-Transport-Library/tests/tools/RxTxApp/build/RxTxApp /home/imtl/RxTxApp
-COPY --chown=imtl --from=builder /Media-Transport-Library/tests/tools/RxTxApp/script /home/imtl/scripts
+COPY --chown=imtl --from=builder "${MTL_REPO}/build /home/imtl"
+COPY --chown=imtl --from=builder "${MTL_REPO}/tests/tools/RxTxApp/build/RxTxApp" "/home/imtl/RxTxApp"
+COPY --chown=imtl --from=builder "${MTL_REPO}/tests/tools/RxTxApp/script" "/home/imtl/scripts"
 
 RUN ldconfig
 SHELL ["/bin/bash", "-c"]
