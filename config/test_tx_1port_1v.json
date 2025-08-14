@@ -1,7 +1,7 @@
 {
     "interfaces": [
         {
-            "name": "0000:17:00.1",
+            "name": "0000:17:00.0",
             "ip": "192.168.84.188"
         }
     ],
@@ -23,8 +23,8 @@
                     "payload_type": 112,
                     "tr_offset": "default",
                     "video_format": "i1080p59",
-                    "pg_format": "YUV_422_10bit",
-                    "video_url": "./test.yuv"
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_orbbec.raw"
                 }
             ]
         }
