@@ -8,7 +8,6 @@ import ctypes
 import sys
 
 import cv2
-
 import misc_util
 import pymtl as mtl
 
@@ -97,13 +96,21 @@ def validate_args(args):
     session_cnt = len(args.p_rx_ips)
     if session_cnt == 0:
         raise ValueError("at least one rx stream is required")
-    if len(args.udp_ports) != session_cnt:
-        raise ValueError("udp_ports count must match p_rx_ips count")
+    if len(args.udp_ports) == 0:
+        raise ValueError("at least one udp_port is required")
     if args.payload_types is None:
         args.payload_types = [112] * session_cnt
-    elif len(args.payload_types) != session_cnt:
-        raise ValueError("payload_types count must match p_rx_ips count")
+    elif len(args.payload_types) == 0:
+        raise ValueError("at least one payload_type is required")
     return session_cnt
+
+
+def get_value(values, index):
+    if len(values) == 1:
+        return values[0]
+    if index < len(values):
+        return values[index]
+    return values[-1]
 
 
 def frame_to_bgr(frame, display_scale_factor):
@@ -196,9 +203,9 @@ def create_rx_session(mtl_handle, init_para, args, stream_idx):
     rx_port.num_port = 1
     mtl.st_rxp_para_ip_set(rx_port, mtl.MTL_SESSION_PORT_P, args.p_rx_ips[stream_idx])
     mtl.st_rxp_para_udp_port_set(
-        rx_port, mtl.MTL_SESSION_PORT_P, args.udp_ports[stream_idx]
+        rx_port, mtl.MTL_SESSION_PORT_P, get_value(args.udp_ports, stream_idx)
     )
-    rx_port.payload_type = args.payload_types[stream_idx]
+    rx_port.payload_type = get_value(args.payload_types, stream_idx)
     rx_para.port = rx_port
 
     return mtl.st20p_rx_create(mtl_handle, rx_para)
@@ -238,7 +245,6 @@ def run_interlaced_loop(streams, display, display_scale_factor):
 
 
 def run_frame_loop(streams, display, display_scale_factor):
-    frame_cnt = [0] * len(streams)
     try:
         while True:
             any_progress = False
@@ -247,11 +253,8 @@ def run_frame_loop(streams, display, display_scale_factor):
                 if not frame:
                     continue
                 any_progress = True
-                frame_cnt[idx] += 1
                 if display:
                     display_frame(frame, idx, display_scale_factor)
-                if frame_cnt[idx] % 300 == 0:
-                    print(f"stream {idx}: received {frame_cnt[idx]} frames")
                 mtl.st20p_rx_put_frame(stream, frame)
             if not any_progress:
                 cv2.waitKey(1)
@@ -283,9 +286,10 @@ def main():
                 sys.exit(1)
             streams.append(stream)
             print(
-                "created rx stream "
-                f"{idx}: ip={args.p_rx_ips[idx]} udp_port={args.udp_ports[idx]} "
-                f"payload_type={args.payload_types[idx]}"
+                "created rx session: "
+                f"ip={args.p_rx_ips[idx]} "
+                f"udp_port={get_value(args.udp_ports, idx)} "
+                f"payload_type={get_value(args.payload_types, idx)}"
             )
 
         if args.interlaced:

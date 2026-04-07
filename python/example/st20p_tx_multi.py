@@ -7,7 +7,6 @@ import argparse
 import sys
 
 import cv2
-
 import misc_util
 import pymtl as mtl
 
@@ -106,15 +105,23 @@ def validate_args(args):
     session_cnt = len(args.p_tx_ips)
     if session_cnt == 0:
         raise ValueError("at least one tx stream is required")
-    if len(args.udp_ports) != session_cnt:
-        raise ValueError("udp_ports count must match p_tx_ips count")
-    if len(args.tx_urls) != session_cnt:
-        raise ValueError("tx_urls count must match p_tx_ips count")
+    if len(args.udp_ports) == 0:
+        raise ValueError("at least one udp_port is required")
+    if len(args.tx_urls) == 0:
+        raise ValueError("at least one tx_url is required")
     if args.payload_types is None:
         args.payload_types = [112] * session_cnt
-    elif len(args.payload_types) != session_cnt:
-        raise ValueError("payload_types count must match p_tx_ips count")
+    elif len(args.payload_types) == 0:
+        raise ValueError("at least one payload_type is required")
     return session_cnt
+
+
+def get_value(values, index):
+    if len(values) == 1:
+        return values[0]
+    if index < len(values):
+        return values[index]
+    return values[-1]
 
 
 def build_init_params(args, session_cnt):
@@ -160,9 +167,9 @@ def create_tx_session(mtl_handle, init_para, args, stream_idx):
     tx_port.num_port = 1
     mtl.st_txp_para_dip_set(tx_port, mtl.MTL_SESSION_PORT_P, args.p_tx_ips[stream_idx])
     mtl.st_txp_para_udp_port_set(
-        tx_port, mtl.MTL_SESSION_PORT_P, args.udp_ports[stream_idx]
+        tx_port, mtl.MTL_SESSION_PORT_P, get_value(args.udp_ports, stream_idx)
     )
-    tx_port.payload_type = args.payload_types[stream_idx]
+    tx_port.payload_type = get_value(args.payload_types, stream_idx)
     tx_para.port = tx_port
 
     return mtl.st20p_tx_create(mtl_handle, tx_para)
@@ -178,7 +185,8 @@ def main():
         sys.exit(1)
 
     files = []
-    for tx_url in args.tx_urls:
+    for idx in range(session_cnt):
+        tx_url = get_value(args.tx_urls, idx)
         try:
             files.append(open(tx_url, "rb"))
         except OSError:
@@ -197,7 +205,6 @@ def main():
 
     streams = []
     frame_sizes = []
-    frame_cnt = [0] * session_cnt
     try:
         for idx in range(session_cnt):
             stream = create_tx_session(mtl_handle, init_para, args, idx)
@@ -208,9 +215,12 @@ def main():
             frame_sz = mtl.st20p_tx_frame_size(stream)
             frame_sizes.append(frame_sz)
             print(
-                "created tx stream "
-                f"{idx}: ip={args.p_tx_ips[idx]} udp_port={args.udp_ports[idx]} "
-                f"payload_type={args.payload_types[idx]} frame_sz={hex(frame_sz)}"
+                "created tx session: "
+                f"ip={args.p_tx_ips[idx]} "
+                f"udp_port={get_value(args.udp_ports, idx)} "
+                f"payload_type={get_value(args.payload_types, idx)} "
+                f"tx_url={get_value(args.tx_urls, idx)} "
+                f"frame_sz={hex(frame_sz)}"
             )
 
         try:
@@ -227,7 +237,8 @@ def main():
                         yuv_frame = files[idx].read(frame_sizes[idx])
                     if not yuv_frame:
                         print(
-                            f"Fail to read {hex(frame_sizes[idx])} from {args.tx_urls[idx]}"
+                            f"Fail to read {hex(frame_sizes[idx])} from "
+                            f"{get_value(args.tx_urls, idx)}"
                         )
                         mtl.st20p_tx_put_frame(stream, frame)
                         continue
@@ -235,9 +246,6 @@ def main():
                     misc_util.copy_to_st_frame(yuv_frame, frame)
                     if args.display:
                         misc_util.frame_display(frame, args.display_scale_factor)
-                    frame_cnt[idx] += 1
-                    if frame_cnt[idx] % 300 == 0:
-                        print(f"stream {idx}: sent {frame_cnt[idx]} frames")
                     mtl.st20p_tx_put_frame(stream, frame)
 
                 if not any_progress:
