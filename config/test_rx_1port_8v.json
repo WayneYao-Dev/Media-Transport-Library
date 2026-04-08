@@ -1,0 +1,178 @@
+{
+    "interfaces": [
+        {
+            "name": "0000:04:00.1",
+            "ip": "192.168.84.189"
+        }
+    ],
+    "rx_sessions": [
+        {
+            "ip": [
+                "239.168.170.1"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.2"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.3"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.4"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.5"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.6"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.7"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        },
+        {
+            "ip": [
+                "239.168.170.8"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "display": false
+                }
+            ]
+        }
+    ]
+}
