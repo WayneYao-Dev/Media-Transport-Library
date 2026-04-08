@@ -24,7 +24,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -46,7 +46,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -68,7 +68,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -90,7 +90,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -112,7 +112,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -134,7 +134,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -156,7 +156,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -178,7 +178,7 @@
                     "device": "AUTO",
                     "input_format": "RGB8",
                     "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                    "st20p_url": "../rgb24_1080p_orbbec.raw"
                 }
             ]
         }
