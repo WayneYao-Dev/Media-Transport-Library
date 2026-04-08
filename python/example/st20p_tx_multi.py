@@ -4,7 +4,9 @@
 """Module of MTL st20p multi-stream tx python example."""
 
 import argparse
+import json
 import sys
+from pathlib import Path
 
 import cv2
 import misc_util
@@ -23,18 +25,24 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="MTL ST20P multi-stream tx python example"
     )
-    parser.add_argument("--p_port", type=str, required=True, help="primary port name")
-    parser.add_argument("--p_sip", type=str, required=True, help="primary local IP")
+    parser.add_argument("--p_port", type=str, default="", help="primary port name")
+    parser.add_argument("--p_sip", type=str, default="", help="primary local IP")
+    parser.add_argument(
+        "--config_file",
+        type=str,
+        default="",
+        help="json config file path, same format as config/tx_1v.json",
+    )
     parser.add_argument(
         "--p_tx_ips",
         type=parse_csv_list,
-        required=True,
+        default=[],
         help="tx destination IP list, separated by comma",
     )
     parser.add_argument(
         "--udp_ports",
         type=parse_int_csv_list,
-        required=True,
+        default=[],
         help="tx udp port list, separated by comma",
     )
     parser.add_argument(
@@ -46,7 +54,7 @@ def parse_args():
     parser.add_argument(
         "--tx_urls",
         type=parse_csv_list,
-        required=True,
+        default=[],
         help="tx yuv file list, separated by comma",
     )
     parser.add_argument(
@@ -102,17 +110,13 @@ def parse_args():
 
 
 def validate_args(args):
-    session_cnt = len(args.p_tx_ips)
+    session_cnt = len(args.streams)
     if session_cnt == 0:
         raise ValueError("at least one tx stream is required")
-    if len(args.udp_ports) == 0:
-        raise ValueError("at least one udp_port is required")
-    if len(args.tx_urls) == 0:
-        raise ValueError("at least one tx_url is required")
-    if args.payload_types is None:
-        args.payload_types = [112] * session_cnt
-    elif len(args.payload_types) == 0:
-        raise ValueError("at least one payload_type is required")
+    if not args.p_port:
+        raise ValueError("p_port is required")
+    if not args.p_sip:
+        raise ValueError("p_sip is required")
     return session_cnt
 
 
@@ -122,6 +126,137 @@ def get_value(values, index):
     if index < len(values):
         return values[index]
     return values[-1]
+
+
+def parse_fps_string(name):
+    for candidate in (name, name.lower(), name.upper()):
+        fps = mtl.st_name_to_fps(candidate)
+        if fps < mtl.ST_FPS_MAX:
+            return fps
+    raise ValueError(f"invalid fps in config: {name}")
+
+
+def load_streams_from_config(config_file):
+    config_path = Path(config_file).resolve()
+    with config_path.open("r", encoding="utf-8") as handle:
+        config = json.load(handle)
+
+    interfaces = config.get("interfaces", [])
+    sessions = config.get("tx_sessions", [])
+    if not interfaces:
+        raise ValueError("config missing interfaces")
+    if not sessions:
+        raise ValueError("config missing tx_sessions")
+
+    streams = []
+    p_port = None
+    p_sip = None
+    common_display = False
+
+    for session in sessions:
+        session_ips = session.get("dip", [])
+        interface_indexes = session.get("interface", [])
+        st20p_entries = session.get("st20p", [])
+        if not session_ips:
+            raise ValueError("tx_session missing dip")
+        if not interface_indexes:
+            raise ValueError("tx_session missing interface")
+        if not st20p_entries:
+            raise ValueError("tx_session missing st20p")
+
+        interface = interfaces[interface_indexes[0]]
+        if p_port is None:
+            p_port = interface["name"]
+            p_sip = interface["ip"]
+        elif p_port != interface["name"] or p_sip != interface["ip"]:
+            raise ValueError("all tx_sessions must use the same interface in this script")
+
+        for st20p in st20p_entries:
+            replicas = int(st20p.get("replicas", 1))
+            start_port = int(st20p["start_port"])
+            payload_type = int(st20p.get("payload_type", 112))
+            tx_url = str((config_path.parent / st20p["st20p_url"]).resolve())
+            common_display = common_display or bool(st20p.get("display", False))
+            for replica in range(replicas):
+                streams.append(
+                    {
+                        "ip": session_ips[0],
+                        "udp_port": start_port + replica,
+                        "payload_type": payload_type,
+                        "tx_url": tx_url,
+                        "width": int(st20p["width"]),
+                        "height": int(st20p["height"]),
+                        "fps": parse_fps_string(st20p["fps"]),
+                        "interlaced": False,
+                        "pipeline_fmt": misc_util.parse_pipeline_fmt(
+                            st20p["input_format"]
+                        ),
+                        "transport_fmt": misc_util.parse_transport_fmt(
+                            st20p["transport_format"]
+                        ),
+                    }
+                )
+
+    return {
+        "p_port": p_port,
+        "p_sip": p_sip,
+        "display": common_display,
+        "streams": streams,
+    }
+
+
+def build_streams_from_args(args):
+    streams = []
+    if not args.p_port or not args.p_sip:
+        return streams
+    session_cnt = len(args.p_tx_ips)
+    if session_cnt == 0:
+        return streams
+    if len(args.udp_ports) == 0:
+        raise ValueError("at least one udp_port is required")
+    if len(args.tx_urls) == 0:
+        raise ValueError("at least one tx_url is required")
+
+    payload_types = args.payload_types
+    if payload_types is None:
+        payload_types = [112]
+
+    for idx in range(session_cnt):
+        streams.append(
+            {
+                "ip": args.p_tx_ips[idx],
+                "udp_port": get_value(args.udp_ports, idx),
+                "payload_type": get_value(payload_types, idx),
+                "tx_url": get_value(args.tx_urls, idx),
+                "width": args.width,
+                "height": args.height,
+                "fps": args.fps,
+                "interlaced": args.interlaced,
+                "pipeline_fmt": args.pipeline_fmt,
+                "transport_fmt": args.transport_fmt,
+            }
+        )
+    return streams
+
+
+def normalize_args(args):
+    if args.config_file:
+        config_data = load_streams_from_config(args.config_file)
+        args.p_port = config_data["p_port"]
+        args.p_sip = config_data["p_sip"]
+        args.display = args.display or config_data["display"]
+        args.streams = config_data["streams"]
+        if args.streams:
+            args.width = args.streams[0]["width"]
+            args.height = args.streams[0]["height"]
+            args.fps = args.streams[0]["fps"]
+            args.interlaced = args.streams[0]["interlaced"]
+            args.pipeline_fmt = args.streams[0]["pipeline_fmt"]
+            args.transport_fmt = args.streams[0]["transport_fmt"]
+        return args
+
+    args.streams = build_streams_from_args(args)
+    return args
 
 
 def build_init_params(args, session_cnt):
@@ -147,16 +282,17 @@ def build_init_params(args, session_cnt):
 
 
 def create_tx_session(mtl_handle, init_para, args, stream_idx):
+    stream = args.streams[stream_idx]
     tx_para = mtl.st20p_tx_ops()
     tx_para.name = f"st20p_tx_python_{stream_idx}"
-    tx_para.width = args.width
-    tx_para.height = args.height
-    tx_para.fps = args.fps
-    tx_para.interlaced = args.interlaced
+    tx_para.width = stream["width"]
+    tx_para.height = stream["height"]
+    tx_para.fps = stream["fps"]
+    tx_para.interlaced = stream["interlaced"]
     tx_para.framebuff_cnt = 3
-    tx_para.transport_fmt = args.transport_fmt
+    tx_para.transport_fmt = stream["transport_fmt"]
     tx_para.transport_packing = args.packing
-    tx_para.input_fmt = args.pipeline_fmt
+    tx_para.input_fmt = stream["pipeline_fmt"]
 
     tx_port = mtl.st_tx_port()
     mtl.st_txp_para_port_set(
@@ -165,18 +301,16 @@ def create_tx_session(mtl_handle, init_para, args, stream_idx):
         mtl.mtl_para_port_get(init_para, mtl.MTL_SESSION_PORT_P),
     )
     tx_port.num_port = 1
-    mtl.st_txp_para_dip_set(tx_port, mtl.MTL_SESSION_PORT_P, args.p_tx_ips[stream_idx])
-    mtl.st_txp_para_udp_port_set(
-        tx_port, mtl.MTL_SESSION_PORT_P, get_value(args.udp_ports, stream_idx)
-    )
-    tx_port.payload_type = get_value(args.payload_types, stream_idx)
+    mtl.st_txp_para_dip_set(tx_port, mtl.MTL_SESSION_PORT_P, stream["ip"])
+    mtl.st_txp_para_udp_port_set(tx_port, mtl.MTL_SESSION_PORT_P, stream["udp_port"])
+    tx_port.payload_type = stream["payload_type"]
     tx_para.port = tx_port
 
     return mtl.st20p_tx_create(mtl_handle, tx_para)
 
 
 def main():
-    args = parse_args()
+    args = normalize_args(parse_args())
 
     try:
         session_cnt = validate_args(args)
@@ -186,7 +320,7 @@ def main():
 
     files = []
     for idx in range(session_cnt):
-        tx_url = get_value(args.tx_urls, idx)
+        tx_url = args.streams[idx]["tx_url"]
         try:
             files.append(open(tx_url, "rb"))
         except OSError:
@@ -216,10 +350,10 @@ def main():
             frame_sizes.append(frame_sz)
             print(
                 "created tx session: "
-                f"ip={args.p_tx_ips[idx]} "
-                f"udp_port={get_value(args.udp_ports, idx)} "
-                f"payload_type={get_value(args.payload_types, idx)} "
-                f"tx_url={get_value(args.tx_urls, idx)} "
+                f"ip={args.streams[idx]['ip']} "
+                f"udp_port={args.streams[idx]['udp_port']} "
+                f"payload_type={args.streams[idx]['payload_type']} "
+                f"tx_url={args.streams[idx]['tx_url']} "
                 f"frame_sz={hex(frame_sz)}"
             )
 
@@ -238,7 +372,7 @@ def main():
                     if not yuv_frame:
                         print(
                             f"Fail to read {hex(frame_sizes[idx])} from "
-                            f"{get_value(args.tx_urls, idx)}"
+                            f"{args.streams[idx]['tx_url']}"
                         )
                         mtl.st20p_tx_put_frame(stream, frame)
                         continue
