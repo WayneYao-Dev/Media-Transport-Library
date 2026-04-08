@@ -169,7 +169,9 @@ def load_streams_from_config(config_file):
             p_port = interface["name"]
             p_sip = interface["ip"]
         elif p_port != interface["name"] or p_sip != interface["ip"]:
-            raise ValueError("all tx_sessions must use the same interface in this script")
+            raise ValueError(
+                "all tx_sessions must use the same interface in this script"
+            )
 
         for st20p in st20p_entries:
             replicas = int(st20p.get("replicas", 1))
