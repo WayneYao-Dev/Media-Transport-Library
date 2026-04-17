@@ -20,10 +20,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -43,10 +43,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -66,10 +66,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -89,10 +89,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -112,10 +112,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -135,10 +135,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -158,10 +158,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }
@@ -181,10 +181,10 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "p25",
+                    "fps": "25",
                     "device": "AUTO",
                     "output_format": "RGB8",
-                    "transport_format": "RGB_8bit",
+                    "transport_format": "ST20_FMT_RGB_8BIT",
                     "display": false,
                     "measure_latency": true
                 }

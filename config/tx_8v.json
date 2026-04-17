@@ -20,11 +20,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -42,11 +42,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -64,11 +64,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -86,11 +86,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
                 }
             ]
         },
@@ -108,11 +108,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_jellyfish.raw"
                 }
             ]
         },
@@ -130,11 +130,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_jellyfish.raw"
                 }
             ]
         },
@@ -152,11 +152,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_jellyfish.raw"
                 }
             ]
         },
@@ -174,11 +174,11 @@
                     "payload_type": 112,
                     "width": 1920,
                     "height": 1080,
-                    "fps": "25",
+                    "fps": "p25",
                     "device": "AUTO",
                     "input_format": "RGB8",
-                    "transport_format": "ST20_FMT_RGB_8BIT",
-                    "st20p_url": "../rgb24_1080p_orbbec.raw"
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_jellyfish.raw"
                 }
             ]
         }
