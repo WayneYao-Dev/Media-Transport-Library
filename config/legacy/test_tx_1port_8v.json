@@ -1,0 +1,186 @@
+{
+    "interfaces": [
+        {
+            "name": "0000:01:00.0",
+            "ip": "192.168.84.188"
+        }
+    ],
+    "tx_sessions": [
+        {
+            "dip": [
+                "239.168.84.1"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.2"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.3"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.4"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.5"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_jellyfish.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.6"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_jellyfish.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.7"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_jellyfish.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "239.168.84.8"
+            ],
+            "interface": [
+                0
+            ],
+            "video": [
+                {
+                    "replicas": 1,
+                    "type": "frame",
+                    "pacing": "gap",
+                    "packing": "BPM",
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "tr_offset": "default",
+                    "video_format": "i1080p25",
+                    "pg_format": "RGB_8bit",
+                    "video_url": "./rgb24_1080p_jellyfish.raw"
+                }
+            ]
+        }
+    ]
+}
