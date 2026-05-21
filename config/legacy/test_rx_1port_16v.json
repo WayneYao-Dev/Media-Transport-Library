@@ -23,7 +23,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -44,7 +45,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -65,7 +67,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -86,7 +89,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -107,7 +111,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -128,7 +133,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -149,7 +155,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -170,7 +177,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -191,7 +199,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -212,7 +221,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -233,7 +243,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -254,7 +265,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -275,7 +287,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -296,7 +309,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -317,7 +331,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         },
@@ -338,7 +353,8 @@
                     "tr_offset": "default",
                     "video_format": "i1080p25",
                     "pg_format": "RGB_8bit",
-                    "display": false
+                    "display": false,
+                    "measure_latency": true
                 }
             ]
         }
