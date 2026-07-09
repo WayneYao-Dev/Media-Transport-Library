@@ -1,0 +1,54 @@
+{
+    "interfaces": [
+        {
+            "name": "0000:01:00.0",
+            "ip": "192.168.108.101"
+        }
+    ],
+    "tx_sessions": [
+        {
+            "dip": [
+                "192.168.108.102"
+            ],
+            "interface": [
+                0
+            ],
+            "st20p": [
+                {
+                    "replicas": 1,
+                    "start_port": 20000,
+                    "payload_type": 112,
+                    "width": 1920,
+                    "height": 1080,
+                    "fps": "p25",
+                    "device": "AUTO",
+                    "input_format": "RGB8",
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        },
+        {
+            "dip": [
+                "192.168.108.102"
+            ],
+            "interface": [
+                0
+            ],
+            "st20p": [
+                {
+                    "replicas": 1,
+                    "start_port": 20002,
+                    "payload_type": 112,
+                    "width": 1920,
+                    "height": 1080,
+                    "fps": "p25",
+                    "device": "AUTO",
+                    "input_format": "RGB8",
+                    "transport_format": "RGB_8bit",
+                    "st20p_url": "./rgb24_1080p_orbbec.raw"
+                }
+            ]
+        }
+    ]
+}
